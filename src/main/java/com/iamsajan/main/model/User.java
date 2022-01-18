@@ -22,7 +22,7 @@ import javax.persistence.Transient;
 public class User {
 	@Id
 	@SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
+	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "user_sequence")
 	private Integer userId;
 	private String fullName;
 	private String address;
@@ -33,14 +33,6 @@ public class User {
 
 	public User() {
 
-	}
-
-	public User(Integer userId, String fullName, String address, String email, LocalDate dob) {
-		this.userId = userId;
-		this.fullName = fullName;
-		this.address = address;
-		this.email = email;
-		this.dob = dob;
 	}
 
 	public User(String fullName, String address, String email, LocalDate dob) {

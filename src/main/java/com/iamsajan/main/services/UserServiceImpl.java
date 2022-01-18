@@ -72,11 +72,8 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public ResponseEntity<HttpStatus> addUsers(User user) {
-		Optional<User> userIdOptional = userRepository.findById(user.getUserId());
 		Optional<User> userEmailOptional = userRepository.findUserByEmail(user.getEmail());
-		if (userIdOptional.isPresent()) {
-			throw new IllegalStateException("User with Id: " + user.getUserId() + " already exists.");
-		} else if (userEmailOptional.isPresent()) {
+		if (userEmailOptional.isPresent()) {
 			throw new IllegalStateException("User with email: " + user.getEmail() + " already exists.");
 		} else {
 			try {

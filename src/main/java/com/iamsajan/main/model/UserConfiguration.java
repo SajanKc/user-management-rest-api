@@ -2,7 +2,7 @@ package com.iamsajan.main.model;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.List;
+import java.util.Arrays;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +26,7 @@ public class UserConfiguration {
 					LocalDate.of(1996, Month.JULY, 1));
 			User shanti = new User("Shanti Thapa", "Kapan", "shanti@gmail.com", LocalDate.of(1998, Month.JANUARY, 12));
 			User amar = new User("Amar Shrestha", "Chabahil", "amar@gmail.com", LocalDate.of(1996, Month.AUGUST, 1));
-			userRepository.saveAll(List.of(sajan, shanti, amar));
+			userRepository.saveAll(Arrays.asList(sajan, shanti, amar));
 		};
 	}
 }

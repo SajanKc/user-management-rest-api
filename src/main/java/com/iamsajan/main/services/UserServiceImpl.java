@@ -18,104 +18,111 @@ import com.iamsajan.main.repository.UserRepository;
 /**
  * @Author Sajan K.C.
  * @Date January 7, 2022
- *
  */
 
 @Service
 public class UserServiceImpl implements UserService {
 
-	@Autowired
-	private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-	@Override
-	public ResponseEntity<List<User>> getUsers() {
-		try {
-			List<User> users = userRepository.findAll();
-			if (users.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			} else {
-				return new ResponseEntity<>(users, HttpStatus.OK);
-			}
-		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+    @Override
+    public ResponseEntity<List<User>> getUsers() {
+        try {
+            List<User> users = userRepository.findAll();
+            if (users.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            } else {
+                return new ResponseEntity<>(users, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-	@Override
-	public ResponseEntity<User> getUsersById(Integer userId) {
-		try {
-			Optional<User> user = userRepository.findById(userId);
-			if (user.isPresent()) {
-				return new ResponseEntity<>(user.get(), HttpStatus.OK);
-			} else {
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-			}
-		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+    @Override
+    public ResponseEntity<User> getUsersById(Integer userId) {
+        try {
+            Optional<User> user = userRepository.findById(userId);
+            if (user.isPresent()) {
+                return new ResponseEntity<>(user.get(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-	@Override
-	public ResponseEntity<HttpStatus> deleteUsersById(Integer userId) {
-		boolean exists = userRepository.existsById(userId);
-		if (!exists) {
-			throw new IllegalStateException("User with id " + userId + " does not exists.");
-		} else {
-			try {
-				userRepository.deleteById(userId);
-				return new ResponseEntity<>(HttpStatus.OK);
-			} catch (Exception e) {
-				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-			}
-		}
-	}
+    @Override
+    public ResponseEntity<HttpStatus> deleteUsersById(Integer userId) {
+        boolean exists = userRepository.existsById(userId);
+        if (!exists) {
+            throw new IllegalStateException("User with id " + userId + " does not exists.");
+        } else {
+            try {
+                userRepository.deleteById(userId);
+                return new ResponseEntity<>(HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
 
-	@Override
-	public ResponseEntity<HttpStatus> addUsers(User user) {
-		Optional<User> userEmailOptional = userRepository.findUserByEmail(user.getEmail());
-		if (userEmailOptional.isPresent()) {
-			throw new IllegalStateException("User with email: " + user.getEmail() + " already exists.");
-		} else {
-			try {
-				userRepository.save(user);
-				return new ResponseEntity<>(HttpStatus.OK);
-			} catch (Exception e) {
-				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-			}
-		}
-	}
+    @Override
+    public ResponseEntity<HttpStatus> addUsers(User user) {
+        Optional<User> userEmailOptional = userRepository.findUserByEmail(user.getEmail());
+        if (userEmailOptional.isPresent()) {
+            throw new IllegalStateException("User with email: " + user.getEmail() + " already exists.");
+        } else {
+            try {
+                userRepository.save(user);
+                return new ResponseEntity<>(HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
 
-	@Override
-	@Transactional
-	public ResponseEntity<HttpStatus> updateUsers(Integer userId, String fullName, String address, String email,
-			LocalDate dob) {
-		Optional<User> userOptional = userRepository.findById(userId);
-		if (userOptional.isPresent()) {
-			User user = userOptional.get();
-			if (fullName != null && fullName.length() > 3 && !Objects.equals(user.getFullName(), fullName)) {
-				user.setFullName(fullName);
-			}
+    @Override
+    @Transactional
+    public ResponseEntity<HttpStatus> updateUsers(Integer userId, String fullName, String address, String email,
+                                                  LocalDate dob) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            if (fullName != null && fullName.length() > 3 && !Objects.equals(user.getFullName(), fullName)) {
+                user.setFullName(fullName);
+            }
 
-			if (address != null && address.length() > 0 && !Objects.equals(user.getAddress(), address)) {
-				user.setAddress(address);
-			}
+            if (address != null && address.length() > 0 && !Objects.equals(user.getAddress(), address)) {
+                user.setAddress(address);
+            }
 
-			if (email != null && email.length() > 0 && !Objects.equals(user.getEmail(), email)) {
-				Optional<User> userEmail = userRepository.findUserByEmail(email);
-				if (userEmail.isPresent()) {
-					throw new IllegalStateException("Email is already taken.");
-				}
-				user.setEmail(email);
-			}
+            if (email != null && email.length() > 0 && !Objects.equals(user.getEmail(), email)) {
+                Optional<User> userEmail = userRepository.findUserByEmail(email);
+                if (userEmail.isPresent()) {
+                    throw new IllegalStateException("Email is already taken.");
+                }
+                user.setEmail(email);
+            }
 
-			if (dob != null && !Objects.equals(user.getDob(), dob)) {
-				user.setDob(dob);
-			}
+            if (dob != null && !Objects.equals(user.getDob(), dob)) {
+                user.setDob(dob);
+            }
 
-			userRepository.save(user);
-			return new ResponseEntity<>(HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+            userRepository.save(user);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public ResponseEntity<User> getUserByAccountNumber(String accountNumber) {
+        Optional<User> optionalUser = userRepository.findByAccountNumber(accountNumber);
+        if (optionalUser.isPresent())
+            return new ResponseEntity<>(optionalUser.get(), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

@@ -29,4 +29,5 @@ public interface UserService {
 	public ResponseEntity<HttpStatus> updateUsers(Integer userId, String fullName, String address, String email,
 			LocalDate dob);
 
+    ResponseEntity<User> getUserByAccountNumber(String accountNumber);
 }

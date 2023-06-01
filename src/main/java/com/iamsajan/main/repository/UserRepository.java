@@ -10,12 +10,12 @@ import com.iamsajan.main.model.User;
 /**
  * @Author Sajan K.C.
  * @Date January 7, 2022
- *
  */
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-	Optional<User> findUserByEmail(String email);
+    Optional<User> findUserByEmail(String email);
 
+    Optional<User> findByAccountNumber(String accountNumber);
 }
